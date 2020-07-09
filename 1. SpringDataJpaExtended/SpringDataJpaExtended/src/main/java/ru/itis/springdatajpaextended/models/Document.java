@@ -4,14 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.io.File;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Slf4j
 public class Document {
 
     @Id
@@ -22,7 +25,20 @@ public class Document {
     private String path;
     private Long size;
 
+    @Transient
+    private String fileName;
+
+    @Transient
+    private File sourceFile;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+
+    @PostLoad
+    public void loadFile(){
+        sourceFile = new File(path);
+        fileName = sourceFile.getName().substring(0, sourceFile.getName().lastIndexOf("."));
+        log.info("Load file for " + fileName);
+    }
 }

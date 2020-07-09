@@ -16,9 +16,15 @@ public class FilesController {
         this.filesService = filesService;
     }
 
-    @GetMapping
+    @GetMapping("/files/init")
     public ResponseEntity<?> init(){
         filesService.init();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/files/convert")
+    public ResponseEntity<?> convert(){
+        filesService.convert();
         return ResponseEntity.ok().build();
     }
 }
